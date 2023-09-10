@@ -36,7 +36,30 @@ button {
 
 main {
   display: flex;
+  flex-direction: column;
+  row-gap: 4rem;
   min-height: 100vh;
   align-items: center;
   justify-content: center;
+}
+
+.map {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  row-gap: 0.5rem;
+  width: 30vw;
+}
+
+.square {
+  padding: 1rem;
+  background-color: #333;
+}
+
+.food {
+  background-color: red;
+}
+
+.snake {
+  background-color: green;
 }
