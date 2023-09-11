@@ -1,59 +1,85 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { get } from 'svelte/store';
-  import { snake } from '../utils/stores';
+  import { HEIGHT, WIDTH } from '../utils/constants';
+  import { food, gameover, playing, snake } from '../utils/stores';
   import type { Pos } from '../utils/types';
 
   let direction: 'up' | 'down' | 'left' | 'right' = 'right';
+  let id: number;
 
   onMount(() => {
     const funcRef = (e: KeyboardEvent) => {
       switch (e.key) {
         case 'a':
+          if (direction == 'right') break;
           direction = 'left';
           break;
         case 'd':
+          if (direction == 'left') break;
           direction = 'right';
           break;
         case 'w':
+          if (direction == 'down') break;
           direction = 'up';
           break;
         case 's':
+          if (direction == 'up') break;
           direction = 'down';
           break;
         case ' ':
-          clearInterval(id);
+          playing.update((p) => !p);
           break;
         default:
           break;
       }
     };
-    const id = setInterval(loop, 300);
     document.addEventListener('keydown', funcRef);
+    playing.subscribe((p) => {
+      if (p) {
+        id = setInterval(loop, 300);
+      } else {
+        clearInterval(id);
+      }
+    });
 
     return () => {
       document.removeEventListener('keydown', funcRef);
+      clearInterval(id);
     };
   });
 
-  function loop() {
+  function checkCollisions() {
     const snakeClone = get(snake);
-    const head = snakeClone[snakeClone.length - 1];
+    let headPos = snakeClone[snakeClone.length - 1];
+    const foodPos = get(food);
+    const foodCollision = headPos.x == foodPos.x && headPos.y == foodPos.y;
+    const wallCollision =
+      headPos.x > WIDTH - 1 ||
+      headPos.x < 0 ||
+      headPos.y > HEIGHT - 1 ||
+      headPos.y < 0;
+    if (wallCollision) {
+      playing.set(false);
+      gameover.set(true);
+    }
+  }
 
-    let newHead: Pos;
-
+  function moveSnake() {
+    const snakeClone = get(snake);
+    let head = { ...snakeClone[snakeClone.length - 1] };
     switch (direction) {
       case 'left':
-        newHead = { x: head.x - 1, y: head.y };
+        head.x -= 1;
         break;
       case 'right':
-        newHead = { x: head.x + 1, y: head.y };
+        head.x += 1;
         break;
       case 'up':
-        newHead = { x: head.x, y: head.y - 1 };
+        head.y -= 1;
         break;
       case 'down':
-        newHead = { x: head.x, y: head.y + 1 };
+        head.y += 1;
         break;
       default:
         break;
@@ -61,9 +87,14 @@
 
     // Shift snake parts
     snake.update((s) => {
-      s.push(newHead);
+      s.push(head);
       s.shift();
       return s;
     });
+  }
+
+  function loop() {
+    moveSnake();
+    checkCollisions();
   }
 </script>
