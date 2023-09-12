@@ -37,7 +37,7 @@
     document.addEventListener('keydown', funcRef);
     playing.subscribe((p) => {
       if (p) {
-        id = setInterval(loop, 300);
+        id = setInterval(loop, 250);
       } else {
         clearInterval(id);
       }
@@ -62,6 +62,11 @@
     if (wallCollision) {
       playing.set(false);
       gameover.set(true);
+    } else if (foodCollision) {
+      snake.update((s) => {
+        s.unshift(snakeClone[0]);
+        return s;
+      });
     }
   }
 
