@@ -37,7 +37,7 @@ button {
 main {
   display: flex;
   flex-direction: column;
-  row-gap: 4rem;
+  row-gap: 1rem;
   min-height: 100vh;
   align-items: center;
   justify-content: center;
@@ -62,4 +62,13 @@ main {
 
 .snake {
   background-color: green;
+}
+
+.header {
+  text-align: center;
+}
+
+.score {
+  font-size: 1.8rem;
+  font-weight: 700;
 }

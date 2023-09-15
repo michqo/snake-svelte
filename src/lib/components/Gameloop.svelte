@@ -2,11 +2,17 @@
   import { onMount } from 'svelte';
   import { get } from 'svelte/store';
   import { HEIGHT, WIDTH } from '../utils/constants';
-  import { food, gameover, playing, snake } from '../utils/stores';
-  import type { Pos } from '../utils/types';
+  import { getRandomPos } from '../utils/helper';
+  import { food, gameover, playing, score, snake } from '../utils/stores';
 
   let direction: 'up' | 'down' | 'left' | 'right' = 'right';
   let id: number;
+
+  function restart() {
+    playing.update((p) => !p);
+    $gameover = false;
+    direction = 'right';
+  }
 
   onMount(() => {
     const funcRef = (e: KeyboardEvent) => {
@@ -28,7 +34,7 @@
           direction = 'down';
           break;
         case ' ':
-          playing.update((p) => !p);
+          restart();
           break;
         default:
           break;
@@ -63,10 +69,12 @@
       playing.set(false);
       gameover.set(true);
     } else if (foodCollision) {
+      $food = getRandomPos();
       snake.update((s) => {
         s.unshift(snakeClone[0]);
         return s;
       });
+      $score += 1;
     }
   }
 
