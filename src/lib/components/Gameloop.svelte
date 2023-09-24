@@ -4,7 +4,8 @@
   import { HEIGHT, WIDTH } from '../utils/constants';
   import { getRandomPos } from '../utils/helper';
   import { food, gameover, playing, score, snake } from '../utils/stores';
-  import type { Pos } from '../utils/types';
+
+  const RENDER_TIME = 200;
 
   let direction: 'up' | 'down' | 'left' | 'right' = 'right';
   let id: number;
@@ -44,7 +45,7 @@
     document.addEventListener('keydown', funcRef);
     playing.subscribe((p) => {
       if (p) {
-        id = setInterval(loop, 250);
+        id = setInterval(loop, RENDER_TIME);
       } else {
         clearInterval(id);
       }

@@ -13,6 +13,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 button {
@@ -37,7 +38,7 @@ button {
 main {
   display: flex;
   flex-direction: column;
-  row-gap: 1rem;
+  row-gap: 2rem;
   min-height: 100vh;
   align-items: center;
   justify-content: center;
@@ -76,4 +77,28 @@ main {
 
 .gameover {
   color: red;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 0.1rem;
+}
+
+h1 {
+  margin: 0;
+}
+
+.github {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+a {
+  color: white;
+  &:hover {
+    color: #646cff;
+  }
 }
