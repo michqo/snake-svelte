@@ -4,6 +4,7 @@
   import { HEIGHT, WIDTH } from '../utils/constants';
   import { getRandomPos } from '../utils/helper';
   import { food, gameover, playing, score, snake } from '../utils/stores';
+  import type { Pos } from '../utils/types';
 
   let direction: 'up' | 'down' | 'left' | 'right' = 'right';
   let id: number;
@@ -55,9 +56,22 @@
     };
   });
 
+  function checkSnakePartsCollision() {
+    const snakeClone = structuredClone(get(snake));
+    if (snakeClone.length <= 1) return;
+    const head = snakeClone.pop();
+    for (const part of snakeClone) {
+      if (head.x == part.x && head.y == part.y) {
+        playing.set(false);
+        gameover.set(true);
+        return;
+      }
+    }
+  }
+
   function checkCollisions() {
     const snakeClone = get(snake);
-    let headPos = snakeClone[snakeClone.length - 1];
+    const headPos = snakeClone[snakeClone.length - 1];
     const foodPos = get(food);
     const foodCollision = headPos.x == foodPos.x && headPos.y == foodPos.y;
     const wallCollision =
@@ -108,6 +122,7 @@
 
   function loop() {
     moveSnake();
+    checkSnakePartsCollision();
     checkCollisions();
   }
 </script>
