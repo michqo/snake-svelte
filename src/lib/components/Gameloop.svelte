@@ -3,37 +3,43 @@
   import { get } from 'svelte/store';
   import { HEIGHT, WIDTH } from '../utils/constants';
   import { getRandomPos } from '../utils/helper';
-  import { food, gameover, playing, score, snake } from '../utils/stores';
+  import {
+    direction,
+    food,
+    gameover,
+    playing,
+    score,
+    snake,
+  } from '../utils/stores';
 
   const RENDER_TIME = 200;
 
-  let direction: 'up' | 'down' | 'left' | 'right' = 'right';
   let id: number;
 
   function restart() {
     playing.update((p) => !p);
     $gameover = false;
-    direction = 'right';
+    $direction = 'right';
   }
 
   onMount(() => {
     const funcRef = (e: KeyboardEvent) => {
       switch (e.key) {
         case 'a':
-          if (direction == 'right') break;
-          direction = 'left';
+          if ($direction == 'right') break;
+          $direction = 'left';
           break;
         case 'd':
-          if (direction == 'left') break;
-          direction = 'right';
+          if ($direction == 'left') break;
+          $direction = 'right';
           break;
         case 'w':
-          if (direction == 'down') break;
-          direction = 'up';
+          if ($direction == 'down') break;
+          $direction = 'up';
           break;
         case 's':
-          if (direction == 'up') break;
-          direction = 'down';
+          if ($direction == 'up') break;
+          $direction = 'down';
           break;
         case ' ':
           restart();
@@ -96,7 +102,7 @@
   function moveSnake() {
     const snakeClone = get(snake);
     let head = { ...snakeClone[snakeClone.length - 1] };
-    switch (direction) {
+    switch ($direction) {
       case 'left':
         head.x -= 1;
         break;

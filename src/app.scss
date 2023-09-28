@@ -2,7 +2,6 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  overflow: hidden;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -14,6 +13,13 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+}
+
+$screen-sm-min: 576px;
+@mixin sm {
+  @media (max-width: #{$screen-sm-min}) {
+    @content;
+  }
 }
 
 button {
@@ -36,12 +42,35 @@ button {
 }
 
 main {
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   row-gap: 2rem;
-  min-height: 100vh;
   align-items: center;
+}
+
+$gap: 0.5rem;
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  row-gap: $gap;
+  @include sm {
+    position: absolute;
+    bottom: 0.5rem;
+    z-index: 1;
+  }
+}
+
+.center {
+  display: flex;
   justify-content: center;
+}
+
+.between {
+  display: flex;
+  justify-content: space-between;
+  column-gap: $gap;
 }
 
 .map {
